@@ -13,7 +13,7 @@ component extends=framework.one {
 			local : {
 				diConfig : {
 					constants : {
-						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "encryptionKey"]
+						propertiesFile : "#ReplaceNoCase(GetDirectoryFromPath(ReplaceNoCase(ExpandPath("*.*"),'\','/','all')),'\','/','all')#config.local.properties", expectedProperties : ["dsn", "encryptionKey"]
 					}
 				},
 				reloadApplicationOnEveryRequest = true, 
@@ -38,7 +38,7 @@ component extends=framework.one {
 		}
 	}
 
-	function getEnvironments() {
+	function getEnvironment() {
 		if (listFindNoCase("www.your-production-url.com", CGI.SERVER_NAME)) { return "prod"; }
 		if (listFindNoCase("dev.your-production-url.com", CGI.SERVER_NAME)) { return "dev"; }
 		if (listFindNoCase("127.0.0.1,localhost.your-production-url.com", CGI.SERVER_NAME)) { return "local"; }
