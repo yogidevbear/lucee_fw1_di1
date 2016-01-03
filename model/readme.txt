@@ -1,0 +1,1 @@
+FW/1 automatically looks in the model folder for CFCs to create and it expects domain objects to be in a beans subfolder and treats everything else as singletons, creating only a single unique instance.
