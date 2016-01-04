@@ -1,7 +1,7 @@
 <cfcomponent accessors="true">
 
 	<!--- <cfproperty name="configuration" /> --->
-	<!--- <cfproperty name="dsn" /> --->
+	<cfproperty name="dsn" />
 
 	<cffunction name="getCountries" access="public" returntype="query" >
 		<cfargument name="countryID" type="numeric" default="0" />

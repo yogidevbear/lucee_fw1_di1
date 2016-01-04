@@ -9,11 +9,11 @@ component accessors="true" {
 
 		if ( arrayLen(arguments.expectedProperties) > 0 ) {
 			for ( var prop in arguments.expectedProperties) {
-				variables["set#prop#"](props.getProperty(prop));
+				variables["#prop#"] = props.getProperty(prop);
 			}
 		} else {
 			for ( var prop in props ) {
-				variables["set#prop#"](props.getProperty(prop));
+				variables["#prop#"] = props.getProperty(prop);
 			}
 		}
 
