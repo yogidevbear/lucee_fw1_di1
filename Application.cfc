@@ -13,7 +13,7 @@ component extends=framework.one {
 			local : {
 				diConfig : {
 					constants : {
-						propertiesFile : "#ReplaceNoCase(GetDirectoryFromPath(ReplaceNoCase(ExpandPath("*.*"),'\','/','all')),'\','/','all')#config.local.properties", expectedProperties : ["dsn", "encryptionKey"]
+						propertiesFile : "#ReplaceNoCase(GetDirectoryFromPath(ReplaceNoCase(ExpandPath("*.*"),'\','/','all')),'\','/','all')#config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
 					}
 				},
 				reloadApplicationOnEveryRequest = true, 
@@ -22,7 +22,7 @@ component extends=framework.one {
 			dev : {
 				diConfig : {
 					constants : {
-						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "encryptionKey"]
+						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
 					}
 				},
 				reloadApplicationOnEveryRequest = false
@@ -30,7 +30,7 @@ component extends=framework.one {
 			prod : {
 				diConfig : {
 					constants : {
-						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "encryptionKey"]
+						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
 					}
 				},
 				password = "supersecret"
@@ -39,6 +39,7 @@ component extends=framework.one {
 	}
 
 	function getEnvironment() {
+		writeDump("application.cfc -> getEnvironment()");
 		if (listFindNoCase("www.your-production-url.com", CGI.SERVER_NAME)) { return "prod"; }
 		if (listFindNoCase("dev.your-production-url.com", CGI.SERVER_NAME)) { return "dev"; }
 		if (listFindNoCase("127.0.0.1,localhost.your-production-url.com", CGI.SERVER_NAME)) { return "local"; }
@@ -46,11 +47,11 @@ component extends=framework.one {
 		return "";
 	}
 
-	function setupApplication() {}
+	function setupApplication() {writeDump("::: setupApplication :::");}
 
-	function setupSession() {}
+	function setupSession() {writeDump("::: setupSession :::");}
 
-	function setupRequest() {
+	function setupRequest() {writeDump("::: setupRequest :::");
 		// If you have some logic that is meant to be run on every request,
 		// that does not need to reference the request context,
 		// the best way is generally to queue up the desired controller method by name here,
@@ -58,17 +59,17 @@ component extends=framework.one {
 		// controller( 'security.checkAuthorization' );
 	}
 
-	function before( struct rc ) {
+	function before( struct rc ) {writeDump("::: before (application.cfc) :::");
 		// set up your RC values
 	}
 
-	function setupView( struct rc ) {
+	function setupView( struct rc ) {writeDump("::: setupView (application.cfc) :::");
 		// pre-rendering logic
 	}
 
-	function after( struct rc ) {}
+	function after( struct rc ) {writeDump("::: after (application.cfc) :::");}
 
-	function setupResponse( struct rc ) {
+	function setupResponse( struct rc ) {writeDump("::: setupResponse (application.cfc) :::");
 		// end of request processing
 	}
 

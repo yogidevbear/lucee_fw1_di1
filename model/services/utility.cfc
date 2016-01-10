@@ -3,18 +3,6 @@
 	<!--- <cfproperty name="configuration" /> --->
 	<cfproperty name="dsn" />
 
-	<cffunction name="getCountries" access="public" returntype="query" >
-		<cfargument name="countryID" type="numeric" default="0" />
-
-		<cfset var queries = structNew() />
-
-		<cfquery name="queries.q1" datasource="#variables.dsn#">
-			SELECT 'United Kingdom'
-		</cfquery>
-
-		<cfreturn queries.q1 />
-	</cffunction>
-
 	<cffunction name="ordinalSuffix" access="public" output="false" returntype="string">
 		<cfargument name="theNumber" type="numeric" required="true">
 

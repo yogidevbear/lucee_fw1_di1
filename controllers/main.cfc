@@ -1,9 +1,12 @@
 component accessors=true {
 	
-	property utilityService;
+	// property utilityService;
+	// property countryGateway;
+	property countryService;
 
 	function default( struct rc ) {
-		writeDump(variables.utilityService.getCountries(1));
+		// writeDump(variables.countryGateway);abort;
+		writeDump(variables.countryService.get( 1 ));
 		abort;
 	}
 }
