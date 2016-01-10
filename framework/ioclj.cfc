@@ -32,8 +32,8 @@ component extends=framework.ioc {
         for ( var folder in folders ) {
             if ( len( folder ) > 4 && left( folder, 4 ) == "clj:" ) {
                 arrayAppend( cljFolders, right( folder, len( folder ) - 4 ) );
-            } else if ( len( folder ) > 5 && left( folder, 4 ) == "cfml:" ) {
-                arrayAppend( cfmlFolders, right( folder, len( folder ) - 5 );
+            } else if ( len( folder ) > 5 && left( folder, 5 ) == "cfml:" ) {
+                arrayAppend( cfmlFolders, right( folder, len( folder ) - 5 ) );
             } else {
                 arrayAppend( cfmlFolders, folder );
                 arrayAppend( cljFolders, folder );

@@ -74,7 +74,7 @@ component {
 
     // programmatically register an alias
     public any function addAlias( string aliasName, string beanName ) {
-        discoverBeans();
+        discoverBeans(); // still need this since we rely on beanName having been discovered :(
         variables.beanInfo[ aliasName ] = variables.beanInfo[ beanName ];
         return this;
     }
@@ -82,7 +82,6 @@ component {
 
     // programmatically register new beans with the factory (add a singleton name/value pair)
     public any function addBean( string beanName, any beanValue ) {
-        discoverBeans();
         variables.beanInfo[ beanName ] = {
             name = beanName, value = beanValue, isSingleton = true
         };
@@ -104,7 +103,6 @@ component {
 
     // programmatically register new beans with the factory (add an actual CFC)
     public any function declareBean( string beanName, string dottedPath, boolean isSingleton = true, struct overrides = { } ) {
-        discoverBeans();
         var singleDir = '';
         if ( listLen( dottedPath, '.' ) > 1 ) {
             var cfc = listLast( dottedPath, '.' );
@@ -128,7 +126,6 @@ component {
     }
 
     public any function factoryBean( string beanName, any factory, string methodName, array args = [ ], struct overrides = { } ) {
-        discoverBeans();
         var metadata = {
             name = beanName, isSingleton = false, // really?
             factory = factory, method = methodName, args = args,
@@ -523,18 +520,20 @@ component {
     }
 
 
-    private struct function findSetters( any cfc, struct iocMeta ) {
+    private struct function findSetters( any cfc, struct iocMeta, boolean isSingleton ) {
         var liveMeta = { setters = iocMeta.setters };
         if ( !iocMeta.pruned ) {
-            // need to prune known setters of transients:
-            var prunable = { };
-            for ( var known in iocMeta.setters ) {
-                if ( !isSingleton( known ) ) {
-                    prunable[ known ] = true;
+            // for transients, we need to prune known setters of transients:
+            if ( !isSingleton ) {
+                var prunable = { };
+                for ( var known in iocMeta.setters ) {
+                    if ( !this.isSingleton( known ) ) {
+                        prunable[ known ] = true;
+                    }
                 }
-            }
-            for ( known in prunable ) {
-                structDelete( iocMeta.setters, known );
+                for ( known in prunable ) {
+                    structDelete( iocMeta.setters, known );
+                }
             }
             iocMeta.pruned = true;
         }
@@ -544,8 +543,8 @@ component {
             var n = len( member );
             if ( isCustomFunction( method ) && left( member, 3 ) == 'set' && n > 3 ) {
                 var property = right( member, n - 3 );
-                if ( !isSingleton( property ) ) {
-                    // ignore properties that we know to be transients...
+                if ( !isSingleton && !this.isSingleton( property ) ) {
+                    // for transients, ignore properties that we know to be transients...
                     continue;
                 }
                 if ( !structKeyExists( liveMeta.setters, property ) ) {
@@ -690,7 +689,8 @@ component {
                     } else {
                         // allow for possible convention-based bean factory
                         args[ property ] = missingBean( property, beanName );
-                        if ( isNull( args[ property ] ) ) continue;
+                        // isNull() does not always work on ACF10...
+                        try { if ( isNull( args[ property ] ) ) continue; } catch ( any e ) { continue; }
                     }
                     evaluate( 'injection.bean.set#property#( argumentCollection = args )' );
                 }
@@ -795,7 +795,7 @@ component {
 /*******************************************************/
                 if ( !structKeyExists( accumulator.injection, beanName ) ) {
                     if ( !structKeyExists( variables.settersInfo, beanName ) ) {
-                        variables.settersInfo[ beanName ] = findSetters( bean, info.metadata );
+                        variables.settersInfo[ beanName ] = findSetters( bean, info.metadata, info.isSingleton );
                     }
                     var setterMeta = {
                         setters = variables.settersInfo[ beanName ].setters,
