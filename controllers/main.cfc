@@ -1,14 +1,13 @@
 component accessors=true {
-	writeDump("::: controllers/main :::")
+
 	// property utilityService;
-	// property countryGateway;
-	writeDump("INJECT: property countryService;");
 	property countryService;
 
 	function default( struct rc ) {
-		writeDump("::: controllers/main/default() :::");
-		// writeDump(variables.countryGateway);abort;
-		writeDump(variables.countryService.get( 1 ));
-		abort;
+		// writeDump("here");
+		rc.countries = variables.countryService.list();
+		writeDump(var = rc.countries, label = "Dump of rc.countries from default() inside /controllers/main.cfc", expand = false);
+		// writeDump(variables.countryService.get( 1 ).getCountryName());
+		// writeDump(variables.countryService.get( 2 ).getCountryName());
 	}
 }

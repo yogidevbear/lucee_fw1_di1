@@ -39,7 +39,6 @@ component extends=framework.one {
 	}
 
 	function getEnvironment() {
-		writeDump("application.cfc -> getEnvironment()");
 		if (listFindNoCase("www.your-production-url.com", CGI.SERVER_NAME)) { return "prod"; }
 		if (listFindNoCase("dev.your-production-url.com", CGI.SERVER_NAME)) { return "dev"; }
 		if (listFindNoCase("127.0.0.1,localhost.your-production-url.com", CGI.SERVER_NAME)) { return "local"; }
@@ -47,11 +46,11 @@ component extends=framework.one {
 		return "";
 	}
 
-	function setupApplication() {writeDump("::: setupApplication :::");}
+	function setupApplication() {}
 
-	function setupSession() {writeDump("::: setupSession :::");}
+	function setupSession() {}
 
-	function setupRequest() {writeDump("::: setupRequest :::");
+	function setupRequest() {
 		// If you have some logic that is meant to be run on every request,
 		// that does not need to reference the request context,
 		// the best way is generally to queue up the desired controller method by name here,
@@ -59,17 +58,17 @@ component extends=framework.one {
 		// controller( 'security.checkAuthorization' );
 	}
 
-	function before( struct rc ) {writeDump("::: before (application.cfc) :::");
+	function before( struct rc ) {
 		// set up your RC values
 	}
 
-	function setupView( struct rc ) {writeDump("::: setupView (application.cfc) :::");
+	function setupView( struct rc ) {
 		// pre-rendering logic
 	}
 
-	function after( struct rc ) {writeDump("::: after (application.cfc) :::");}
+	function after( struct rc ) {}
 
-	function setupResponse( struct rc ) {writeDump("::: setupResponse (application.cfc) :::");
+	function setupResponse( struct rc ) {
 		// end of request processing
 	}
 

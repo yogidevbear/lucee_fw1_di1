@@ -1,23 +1,37 @@
 component accessors=true {
-writeDump("::: /model/services/country.cfc :::");
-writeDump("INJECT: property dsn;");
-	property dsn;
-writeDump("INJECT: property countryGateway;");
-	property countryGateway;
 
-	public function init( numeric countryID = 0 ) {
-		writeDump("START: /model/services/country.cfc -> init()");
-		writeDump(">> Running variables.countryGateway.getCountries(countryID:countryID)");
-		writeDump(variables);
+	property dsn;
+
+	public function init( any countryGateway, any beanFactory, numeric countryID = 0 ) {
+		variables.countryGateway = countryGateway;
+		variables.beanFactory = beanFactory;
 		var qCountries = variables.countryGateway.getCountries(countryID:countryID);
 		variables.countries = { };
-		writeDump(countries);abort;
 		for (var row in qCountries) {
-			// var country = 
+			var country = variables.beanFactory.getBean( "countryBean" );
+			country.setCountryID(row.countryID);
+			country.setCountryName(row.countryName);
+
+			variables.countries[country.getCountryID()] = country;
 		}
 
-		writeDump("END: /model/services/country.cfc -> init()");
+		writeDump(var = variables.countries, label = "Dump of variables.countries from init() inside /model/services/country.cfc", expand = false);
+
 		return this;
+	}
+
+	function get( string id ) {
+		var result = 0;
+		if ( len( id ) && structKeyExists( variables.countries, id ) ) {
+			result = variables.countries[ id ];
+		} else {
+			result = variables.beanFactory.getBean( "countryBean" );
+		}
+		return result;
+	}
+
+	function list() {
+		return variables.countries;
 	}
 
 }

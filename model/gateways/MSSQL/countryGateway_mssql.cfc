@@ -1,25 +1,36 @@
 <cfcomponent accessors="true">
-<cfdump var="::: /model/gateways/MSSQL/countryGateway_mssql.cfc :::" />
 	
 	<cfproperty name="dsn" />
 
 	<cffunction name="init" returntype="any">
-		<cfdump var="START: /model/gateways/MSSQL/countryGateway_mssql.cfc -> init()" />
-		<cfdump var="END: /model/gateways/MSSQL/countryGateway_mssql.cfc -> init()" />
 		<cfreturn this />
 	</cffunction>
 
 	<cffunction name="getCountries" access="public" returntype="query" >
 		<cfargument name="countryID" type="numeric" default="0" />
-<cfdump var="START: /model/gateways/MSSQL/countryGateway_mssql.cfc -> getCountries()" />
-		<cfset var queries = structNew() />
 
-		<cfquery name="queries.q1" datasource="#variables.dsn#">
-			SELECT 'United Kingdom'
+		<cfset local.fakeQuery = QueryNew("countryID,countryName","cf_sql_integer,cf_sql_varchar") />
+		<cfset local.newRow = QueryAddRow(local.fakeQuery, 5) />
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryID", 1, 1)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryName", "United Kingdom", 1)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryID", 2, 2)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryName", "Canada", 2)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryID", 3, 3)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryName", "USA", 3)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryID", 4, 4)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryName", "China", 4)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryID", 5, 5)>
+		<cfset local.temp = QuerySetCell(local.fakeQuery, "countryName", "Australia", 5)>
+
+		<cfquery name="local.q1" dbtype="query">
+			SELECT *
+			FROM local.fakeQuery
+			ORDER BY countryName ASC
 		</cfquery>
 
-<cfdump var="END: /model/gateways/MSSQL/countryGateway_mssql.cfc -> getCountries()" />
-		<cfreturn queries.q1 />
+		<cfdump var="#local.q1#" label="Dump of local.q1 return from getCountries() inside /model/gateways/MSSQL/countryGateway_mssql.cfc" expand="false" />
+		
+		<cfreturn local.q1 />
 	</cffunction>
 
 </cfcomponent>

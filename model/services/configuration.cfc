@@ -1,16 +1,10 @@
 component accessors="true" {
-writeDump("::: /model/services/configuration.cfc :::");
-writeDump("=== property dsn; ===");
-writeDump("=== property dbVendor; ===");
-writeDump("=== property encryptionKey; ===");
 
 	property dsn;
 	property dbVendor;
 	property encryptionKey;
 
 	function init( propertiesFile, expectedProperties ) {
-		writeDump("START: /model/services/configuration.cfc -> init()");
-		writeDump(">> Reading in the properties file and setting the values for the properties 'dsn', 'dbVendor' and 'encryptionKey'")
 		var props = CreateObject("java","java.util.Properties").init();
 		props.load( CreateObject("java","java.io.FileInputStream").init(arguments.propertiesFile) );
 
@@ -24,7 +18,6 @@ writeDump("=== property encryptionKey; ===");
 			}
 		}
 
-		writeDump("END: /model/services/configuration.cfc -> init()");
 		return this;
 	}
 }

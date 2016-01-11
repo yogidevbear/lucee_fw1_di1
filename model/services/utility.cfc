@@ -1,6 +1,5 @@
 <cfcomponent accessors="true">
 
-	<!--- <cfproperty name="configuration" /> --->
 	<cfproperty name="dsn" />
 
 	<cffunction name="ordinalSuffix" access="public" output="false" returntype="string">
