@@ -28,8 +28,6 @@
 			ORDER BY countryName ASC
 		</cfquery>
 
-		<cfdump var="#local.q1#" label="Dump of local.q1 return from getCountries() inside /model/gateways/MSSQL/countryGateway_mssql.cfc" expand="false" />
-		
 		<cfreturn local.q1 />
 	</cffunction>
 

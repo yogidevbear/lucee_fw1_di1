@@ -1,32 +1,26 @@
 component accessors="true" {
 
+	// The loadlistener relies on `property configuration;` — injection — so it doesn’t need to call `getBean()`
 	property configuration;
 
 	function onLoad( di1 ) {
-		di1.addBean( "dsn", di1.getBean("configuration").getDSN() );
-		di1.addBean( "dbVendor", di1.getBean("configuration").getDbVendor() );
-		di1.addBean( "getEncryptionKey", di1.getBean("configuration").getEncryptionKey() );
+		// Saves the vendor value locally to avoid calling `getBean()` as well.
+		var vendor = variables.configuration.getDbVendor();
+		di1.addBean( "dsn", variables.configuration.getDSN() );
+		di1.addBean( "dbVendor", vendor );
+		di1.addBean( "encryptionKey", variables.configuration.getEncryptionKey() );
+		var found = 0;
+		
+		// Using `getBeanInfo()` with a (case-insensitive) regex to find the gateways — since they are in the bean factory — rather than looking on the filesystem
+		for ( var gw in di1.getBeanInfo( regex = "(?i)" & vendor & "_" ).beanInfo ) {
+			// Assume that if any `vendor_foogateway` beans are found that the `vendor` is supported
+			di1.addAlias( gw.replaceNoCase( vendor & "_", ""), gw );
+			++found;
+		}
 
-		switch ( di1.getBean("dbVendor") ) {
-			case "MSSQL":
-				setupGatewaysForDBVendor( di1, di1.getBean("dbVendor") );
-				break;
-			default:
-				throw(type="InvalidConfigException", message="DBVendor #variables.defaultAppConfig.dbVendor# is not currently supported.");
-				break;
+		if ( !found ) {
+			throw(type="InvalidConfigException", message="DBVendor #vendor# is not currently supported.");
 		}
 	}
 
-	private function setupGatewaysForDBVendor (di1, dbVendor) {
-		var gatewaysDir = expandPath('/model/gateways/' & dbVendor & '/');
-		var gateways = directoryList(gatewaysDir);
-		for (var filename in gateways) {
-			filename = filename.replace(gatewaysDir, '', 'all').replaceNoCase('.cfc', '');
-	
-			if ( filename.findNoCase('Gateway') && filename.findNoCase('_' & dbVendor) ) {
-				di1.addAlias(replaceNoCase(filename, '_' & dbVendor, ''), filename);
-				di1.getBean(replaceNoCase(filename, '_' & dbVendor, ''));
-			}
-		}
-	}
 }
