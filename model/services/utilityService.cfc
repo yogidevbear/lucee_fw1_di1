@@ -1,6 +1,97 @@
-<cfcomponent accessors="true">
+component accessors=true {
 
-	<cfproperty name="dsn" />
+	public string function ordinalSuffix( numeric theNumber ) {
+		var suffix = "";
+		if ( theNumber >= 10 && mid( theNumber, len(theNumber)-1, 1) == "1" ) {
+			suffix = "th";
+		} else if ( theNumber > 0 ) {
+			switch ( right( theNumber, 1 ) ) {
+				case "1":
+					suffix = "st";
+					break;
+				case "2":
+					suffix = "nd";
+					break;
+				case "3":
+					suffix = "rd";
+					break;
+				default:
+					suffix = "th";
+					break;
+			}
+		}
+		return suffix;
+	}
+
+	public string function hexToRgba( required string hex, numeric opacity = 1 ) {
+		var cleanHex = Replace( arguments.hex, "##", "", "all" );
+		var rgba = ArrayNew(1);
+		ArrayAppend( rgba, mid( cleanHex, 1, 2 ) );
+		ArrayAppend( rgba, mid( cleanHex, 3, 2 ) );
+		ArrayAppend( rgba, mid( cleanHex, 5, 2 ) );
+		return "rgba(#InputBaseN(rgba[1],16)#,#InputBaseN(rgba[2],16)#,#InputBaseN(rgba[3],16)#,#arguments.opacity#)";
+	}
+
+	public string function ellipse( required string originalString, required numeric newLength ) {
+		if ( arguments.newLength <= 0 ) || ( len(arguments.originalString) <= arguments.newLength ) {
+			return arguments.originalString;
+		}
+		return left( trim( arguments.originalString ), arguments.newLength ) & "...";
+	}
+
+	public numberic function daysCountDown( required string dateTo, string dateFrom = "#Now()#" ) {
+		var nResult = DateDiff(
+			"d",
+			CreateDate( DatePart('yyyy',arguments.dateFrom), DatePart('m',arguments.dateFrom), DatePart('d',arguments.dateFrom) ),
+			CreateDate( DatePart('yyyy',arguments.dateTo), DatePart("m",arguments.dateTo), DatePart("d",arguments.dateTo) )
+		);
+		return nResult;
+	}
+
+	public struct function cfzip( required string directoryToZip, required string destination, boolean overwrite = true ) {
+		var stResult = { status : false, error : "" };
+
+		try {
+			cfzip( action = "zip", source = directoryToZip, file = destination, overwrite = overwrite );
+			stResult.status = true;
+		} catch(any e) {
+			stResult.error = e;
+		}
+
+		return stResult;
+	}
+
+	/* Converts a specific row in a query result set object into a structure (Courtesy of Neiland - http://www.neiland.net/blog/article/converting-a-query-row-into-a-structure/) */
+	public struct function rowToStruct( required query queryObj, required numeric row ) {
+		var stResult = {};
+		var colname = "";
+
+		for ( var colname in queryObj.columnList ) {
+			stResult[colname] = queryObj[colname][row];
+		}
+
+		return stResult;
+	}
+
+	/* Converts a query result set object into an array of structures (Courtesy of Neiland - http://www.neiland.net/blog/article/converting-a-query-row-into-a-structure/) */
+	public array function rowToStructArray( required query queryObj ) {
+		var aResult = [];
+		var colname = "";
+
+		for ( var row in queryObj ) {
+			var rowStruct = {};
+			for ( var colname in queryObj.columnList ) {
+				rowStruct[colname] = queryObj[colname][queryObj.currentRow];
+			}
+			arrayAppend( aResult, rowStruct );
+		}
+
+		return aResult;
+	}
+
+}
+/*
+<cfcomponent accessors="true">
 
 	<cffunction name="ordinalSuffix" access="public" output="false" returntype="string">
 		<cfargument name="theNumber" type="numeric" required="true">
@@ -112,4 +203,4 @@
 		<cfreturn dayCountdown/>
 	</cffunction>
 
-</cfcomponent>
+</cfcomponent>*/
