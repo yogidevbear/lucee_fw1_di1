@@ -26,6 +26,22 @@ component accessors=true {
 		return result;
 	}
 
+	function getByEmail( string email ) {
+		var result = "";
+		if ( len( email ) ) {
+			for ( var userID in variables.users ) {
+				var user = variables.users[ userID ];
+				if ( !comparenocase( email, user.getUserEmail() ) ) {
+					result = user;
+				}
+			}
+		}
+		if ( !isStruct( result ) ) {
+			result = variables.beanFactory.getBean( "userBean" );
+		}
+		return result;
+	}
+
 	function list() {
 		return variables.users;
 	}
