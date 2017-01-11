@@ -15,13 +15,10 @@ component accessors=true {
 	}
 
 	function get( string id ) {
-		var result = 0;
 		if ( len( id ) && structKeyExists( variables.roles, id ) ) {
-			result = variables.roles[ id ];
-		} else {
-			result = variables.beanFactory.getBean( "roleBean" );
+			return variables.roles[ id ];
 		}
-		return result;
+		return variables.beanFactory.getBean( "roleBean" );
 	}
 
 	function list() {

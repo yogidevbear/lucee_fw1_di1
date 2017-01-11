@@ -1,30 +1,58 @@
 <cfcomponent accessors="true">
-	
-	<cfproperty name="dsn" />
 
 	<cffunction name="init" returntype="any">
+		<cfargument name="dsn" type="any" />
+		<cfset variables.dsn = dsn />
 		<cfreturn this />
 	</cffunction>
 
-	<cffunction name="getUsers" access="public" returntype="query" >
+	<cffunction name="getUsers" access="public" returntype="query">
 		<cfargument name="userID" type="numeric" default="0" />
 
-		<cfset local.fakeQuery = QueryNew("userID,userEmail,roleID","cf_sql_integer,cf_sql_varchar,cf_sql_integer") />
-		<cfset local.newRow = QueryAddRow(local.fakeQuery, 2) />
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "userID", 1, 1)>
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "userEmail", "bob@example.com", 1)>
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "roleID", 2, 1)>
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "userID", 2, 2)>
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "userEmail", "joe@example.com", 2)>
-		<cfset local.temp = QuerySetCell(local.fakeQuery, "roleID", 1, 2)>
-
-		<cfquery name="local.q1" dbtype="query">
-			SELECT *
-			FROM local.fakeQuery
-			ORDER BY userEmail ASC
+		<cfquery name="local.qUsers" datasource="#variables.dsn#">
+			SELECT
+				 u.userID
+				,u.username
+				,u.password
+				,u.salt
+				,u.firstname
+				,u.lastname
+				,u.activationCode
+				,u.activationCodeCreatedAt
+				,u.activatedAt
+				,u.createdAt
+				,u.updatedAt
+				,urg.roleID
+			FROM dbo.[user] u
+			INNER JOIN dbo.userRoleGroup urg
+				ON u.userID = urg.userID
+			INNER JOIN dbo.role r
+				ON urg.roleID = r.roleID
+			WHERE u.removedAt IS NULL
+			<cfif userID GT 0>
+			  AND u.userID = <cfqueryparam cfsqltype="cf_sql_integer" value="#userID#" />
+			</cfif>
+			ORDER BY u.username ASC
 		</cfquery>
 
-		<cfreturn local.q1 />
+		<cfreturn local.qUsers />
+	</cffunction>
+
+	<cffunction name="getUserRoles" access="public" returntype="query">
+		<cfargument name="userID" type="numeric" required="true" />
+
+		<cfquery name="local.qUserRoles" datasource="#variables.dsn#">
+			SELECT
+				 urg.userID
+				,urg.roleID
+				,r.roleName
+			FROM dbo.userRoleGroup urg
+			INNER JOIN dbo.role r
+				ON urg.roleID = r.roleID
+			WHERE urg.userID = <cfqueryparam cfsqltype="cf_sql_integer" value="#userID#" />
+		</cfquery>
+
+		<cfreturn local.qUserRoles />
 	</cffunction>
 
 </cfcomponent>

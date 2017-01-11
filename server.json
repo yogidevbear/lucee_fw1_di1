@@ -1,0 +1,15 @@
+{
+    "web":{
+        "aliases":{
+            "testbox":"../testbox",
+            "/tests/":"../tests/"
+        },
+        "rewrites":{
+            "config":".htaccess",
+            "enable":true
+        }
+    },
+    "app":{
+        "cfengine":"lucee@5.1.0.034"
+    }
+}

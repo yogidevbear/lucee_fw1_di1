@@ -13,26 +13,68 @@ component extends=framework.one {
 			local : {
 				diConfig : {
 					constants : {
-						propertiesFile : "#ReplaceNoCase(GetDirectoryFromPath(ReplaceNoCase(ExpandPath("*.*"),'\','/','all')),'\','/','all')#config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
+						propertiesFile : "#ReplaceNoCase(GetDirectoryFromPath(ReplaceNoCase(ExpandPath("."),'\','/','all')),'\','/','all')#config/config.local.properties",
+						expectedProperties : [
+							"dsn",
+							"dbVendor",
+							"encryptionKey",
+							"pbkdfAlgorithm",
+							"pbkdfIterations",
+							"pbkdfKeysize",
+							"reCaptchaClientKey",
+							"reCaptchaServerSecret",
+							"reCaptchaGoogleUrl",
+							"base62Alphabet"
+						]
 					}
 				},
-				reloadApplicationOnEveryRequest = true, 
+				// generateSES = true,
+				SESOmitIndex = true,
+				reloadApplicationOnEveryRequest = true,
 				error = "main.detailederror"
 			},
 			dev : {
 				diConfig : {
 					constants : {
-						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
+						propertiesFile : "config.local.properties",
+						expectedProperties : [
+							"dsn",
+							"dbVendor",
+							"encryptionKey",
+							"pbkdfAlgorithm",
+							"pbkdfIterations",
+							"pbkdfKeysize",
+							"reCaptchaClientKey",
+							"reCaptchaServerSecret",
+							"reCaptchaGoogleUrl",
+							"base62Alphabet"
+						]
 					}
 				},
+				// generateSES = true,
+				SESOmitIndex = true,
 				reloadApplicationOnEveryRequest = false
 			},
 			prod : {
 				diConfig : {
 					constants : {
-						propertiesFile : "config.local.properties", expectedProperties : ["dsn", "dbVendor", "encryptionKey"]
+						propertiesFile : "config.local.properties",
+						expectedProperties : [
+							"dsn",
+							"dbVendor",
+							"encryptionKey",
+							"pbkdfAlgorithm",
+							"pbkdfIterations",
+							"pbkdfKeysize",
+							"reCaptchaClientKey",
+							"reCaptchaServerSecret",
+							"reCaptchaGoogleUrl",
+							"base62Alphabet"
+						]
 					}
 				},
+				// generateSES = true,
+				SESOmitIndex = true,
 				password = "supersecret"
 			}
 		}
@@ -71,6 +113,5 @@ component extends=framework.one {
 	function setupResponse( struct rc ) {
 		// end of request processing
 	}
-
 
 }

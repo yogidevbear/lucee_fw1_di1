@@ -3,6 +3,13 @@ component accessors="true" {
 	property dsn;
 	property dbVendor;
 	property encryptionKey;
+	property pbkdfAlgorithm;
+	property pbkdfIterations;
+	property pbkdfKeysize;
+	property reCaptchaClientKey;
+	property reCaptchaServerSecret;
+	property reCaptchaGoogleUrl;
+	property base62Alphabet;
 
 	function init( propertiesFile, expectedProperties ) {
 		var props = CreateObject("java","java.util.Properties").init();

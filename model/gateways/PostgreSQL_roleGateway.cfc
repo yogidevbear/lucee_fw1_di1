@@ -1,7 +1,5 @@
 <cfcomponent accessors="true">
 	
-	<!--- <cfproperty name="dsn" /> --->
-
 	<cffunction name="init" returntype="any">
 		<cfargument name="dsn" type="any" />
 		<cfset variables.dsn = dsn />

@@ -7,12 +7,15 @@ component accessors=true {
 		variables.users = structNew("linked");
 
 		var qUsers = variables.userGateway.getUsers(userID:userID);
-		
-		for (var row in qUsers) {
-			row.role = variables.roleService.list().get(qUsers.currentRow);
-			variables.users[row.userID] = beanFactory.injectProperties( "userBean", row );
+		for (var user in qUsers) {
+			var qUserRoles = variables.userGateway.getUserRoles(userID:user.userID);
+			user.roles = [];
+			for (var role in qUserRoles) {
+				arrayAppend( user.roles, variables.roleService.list().get(role.roleID) );
+			}
+			variables.users[user.userID] = beanFactory.injectProperties( "userBean", user );
 		}
-
+		
 		return this;
 	}
 
@@ -31,12 +34,12 @@ component accessors=true {
 		if ( len( email ) ) {
 			for ( var userID in variables.users ) {
 				var user = variables.users[ userID ];
-				if ( !comparenocase( email, user.getUserEmail() ) ) {
+				if ( comparenocase( email, user.getUsername() ) == 0 ) {
 					result = user;
 				}
 			}
 		}
-		if ( !isStruct( result ) ) {
+		if ( getMetadata(result).name != "model.beans.userBean" ) {
 			result = variables.beanFactory.getBean( "userBean" );
 		}
 		return result;
@@ -44,6 +47,45 @@ component accessors=true {
 
 	function list() {
 		return variables.users;
+	}
+
+	function getHashesPassword( string email ) {
+		var userBean = getByEmail( email );
+		return {
+			"hashedPassword" : userBean.getPassword(),
+			"salt" : userBean.getSalt()
+		};
+	}
+
+	function save( required component user ) {
+		if ( arguments.user.getUserID() == 0 ) {
+			var newUserID = variables.userGateway.insertUser(
+				 username: arguments.user.getUsername()
+				,password: arguments.user.getPassword()
+				,salt: arguments.user.getSalt()
+				,firstname: arguments.user.getFirstname()
+				,lastname: arguments.user.getLastname()
+				,activationKey: arguments.user.getActivationKey()
+				,activationCode: arguments.user.getActivationCode()
+				,roleID: arguments.user.getRoleID()
+			);
+			if ( newUserID > 0 ) {
+				var qUser = variables.userGateway.getUsers(userID:newUserID);
+				for (var user in qUser) {
+					var qUserRoles = variables.userGateway.getUserRoles(userID:user.userID);
+					user.roles = [];
+					for (var role in qUserRoles) {
+						arrayAppend( user.roles, variables.roleService.list().get(role.roleID) );
+					}
+					variables.users[user.userID] = beanFactory.injectProperties( "userBean", user );
+					return get( user.userID );
+				}
+			} else {
+				return get( 0 );
+			}
+		} else {
+			writeDump("UPDATE");abort;
+		}
 	}
 
 }
