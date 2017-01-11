@@ -1,8 +1,8 @@
 {
     "web":{
         "aliases":{
-            "testbox":"../testbox",
-            "/tests/":"../tests/"
+            "/testbox":"../testbox",
+            "/tests":"../tests"
         },
         "rewrites":{
             "config":".htaccess",

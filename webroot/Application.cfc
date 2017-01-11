@@ -9,6 +9,7 @@ component extends=framework.one {
 
 	variables.framework = {
 		diConfig : { loadListener : "loadlistener" },
+		unhandledPaths : "/testbox,/tests",
 		environments : {
 			local : {
 				diConfig : {
