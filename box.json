@@ -1,7 +1,9 @@
 {
     "dependencies":{
-        "testbox":"^2.4.0+80",
         "fw1":"^4.0.0"
+    },
+    "devDependencies":{
+    	"testbox":"^2.4.0+80"
     },
     "installPaths":{
         "testbox":"testbox",
