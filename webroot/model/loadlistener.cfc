@@ -16,6 +16,13 @@ component accessors="true" {
 		di1.addBean( "reCaptchaServerSecret", variables.configuration.getReCaptchaServerSecret() );
 		di1.addBean( "reCaptchaGoogleUrl", variables.configuration.getReCaptchaGoogleUrl() );
 		di1.addBean( "base62Alphabet", variables.configuration.getBase62Alphabet() );
+		di1.addBean( "siteName", variables.configuration.getSiteName() );
+		di1.addBean( "siteURL", variables.configuration.getSiteURL() );
+		di1.addBean( "smtpServer", variables.configuration.getSmtpServer() );
+		di1.addBean( "smtpPort", variables.configuration.getSmtpPort() );
+		di1.addBean( "smtpUsername", variables.configuration.getSmtpUsername() );
+		di1.addBean( "smtpPassword", variables.configuration.getSmtpPassword() );
+		di1.addBean( "emailNoReply", variables.configuration.getEmailNoReply() );
 		var found = 0;
 		
 		// Using `getBeanInfo()` with a (case-insensitive) regex to find the gateways — since they are in the bean factory — rather than looking on the filesystem

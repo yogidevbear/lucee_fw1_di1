@@ -24,17 +24,17 @@ Once your database has been created, you need to sign in to the **Lucee Web Admi
 
 You will also need to add some mappings in the admin. Click on **Mappings** in the left navigation (underneath **Archives & Resources**). Now add the following mappings:
 
-| framework-one: |
+| framework-one: ||
 |---|---|
 | Virtual | `/framework` |
 | Resource | `../framework` |
 
-| TestBox: |
+| TestBox: ||
 |---|---|
 | Virtual | `/testbox` |
 | Resource | `../testbox` |
 
-| Actual tests: |
+| Actual tests: ||
 |---|---|
 | Virtual | `/tests` |
 | Resource | `../tests` |

@@ -45,6 +45,25 @@ component accessors=true {
 		return result;
 	}
 
+	function getByActivationKeyAndActivationCode( required string activationKey, required string activationCode ) {
+		var result = "";
+		if ( len( activationKey ) && len(activationCode) ) {
+			for ( var userID in variables.users ) {
+				var user = variables.users[ userID ];
+				if (
+					comparenocase( activationKey, user.getActivationKey() ) == 0 &&
+					comparenocase( activationCode, user.getActivationCode() ) == 0
+				) {
+					result = user;
+				}
+			}
+		}
+		if ( getMetadata(result).name != "model.beans.userBean" ) {
+			result = variables.beanFactory.getBean( "userBean" );
+		}
+		return result;
+	}
+
 	function list() {
 		return variables.users;
 	}

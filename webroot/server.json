@@ -10,6 +10,6 @@
         }
     },
     "app":{
-        "cfengine":"lucee@5.1.0.034"
+        "cfengine":"lucee@5"
     }
 }

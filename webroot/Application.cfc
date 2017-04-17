@@ -25,7 +25,14 @@ component extends=framework.one {
 							"reCaptchaClientKey",
 							"reCaptchaServerSecret",
 							"reCaptchaGoogleUrl",
-							"base62Alphabet"
+							"base62Alphabet",
+							"siteName",
+							"siteURL",
+							"smtpServer",
+							"smtpPort",
+							"smtpUsername",
+							"smtpPassword",
+							"emailNoReply"
 						]
 					}
 				},
@@ -48,7 +55,14 @@ component extends=framework.one {
 							"reCaptchaClientKey",
 							"reCaptchaServerSecret",
 							"reCaptchaGoogleUrl",
-							"base62Alphabet"
+							"base62Alphabet",
+							"siteName",
+							"siteURL",
+							"smtpServer",
+							"smtpPort",
+							"smtpUsername",
+							"smtpPassword",
+							"emailNoReply"
 						]
 					}
 				},
@@ -70,7 +84,14 @@ component extends=framework.one {
 							"reCaptchaClientKey",
 							"reCaptchaServerSecret",
 							"reCaptchaGoogleUrl",
-							"base62Alphabet"
+							"base62Alphabet",
+							"siteName",
+							"siteURL",
+							"smtpServer",
+							"smtpPort",
+							"smtpUsername",
+							"smtpPassword",
+							"emailNoReply"
 						]
 					}
 				},

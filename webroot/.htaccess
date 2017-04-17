@@ -5,5 +5,5 @@ RewriteBase /
 RewriteRule ^assets/(images|css|bundles).*$ - [L]
 RewriteRule ^404.cfm$ - [L]
 # Default subsystem rewrites
-RewriteRule ^(signup|signin|signout)$ /index.cfm?action\=main.$1 [NC, QSA, L]
+RewriteRule ^(signup|signin|signout)$ /index.cfm?action=main.$1 [NC, QSA, L]
 #RewriteRule ^/$ /index.cfm [L]

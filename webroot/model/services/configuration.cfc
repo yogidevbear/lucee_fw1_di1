@@ -10,6 +10,13 @@ component accessors="true" {
 	property reCaptchaServerSecret;
 	property reCaptchaGoogleUrl;
 	property base62Alphabet;
+	property siteName;
+	property siteURL;
+	property smtpServer;
+	property smtpPort;
+	property smtpUsername;
+	property smtpPassword;
+	property emailNoReply;
 
 	function init( propertiesFile, expectedProperties ) {
 		var props = CreateObject("java","java.util.Properties").init();
