@@ -28,7 +28,8 @@ component accessors=true {
 			,fullname : "Guest"
 			,firstname : ""
 			,lastname : ""
-			,role : "none"
+			,roleIDList : ""
+			,roleNameList : ""
 		};
 	}
 
@@ -43,17 +44,19 @@ component accessors=true {
 		if ( user.getUserID() > 0 ) {
 			passwordDetails = variables.userService.getHashesPassword( user.getUsername() );
 			if ( structKeyExists(passwordDetails, "hashedPassword") && structKeyExists(passwordDetails, "salt") && len(passwordDetails.salt) > 0 ) {
-				if ( len(user.getActivatedAt) > 0 ) {
+				if ( len(user.getActivatedAt()) > 0 ) {
 					if ( passwordDetails.hashedPassword == getPasswordBasedKey(arguments.password, passwordDetails.salt) ) {
 						SESSION.stUser = {
 							 userID : user.getUserID()
 							,fullname : user.getFirstname() & ' ' & user.getLastname()
 							,firstname : user.getFirstname()
 							,lastname : user.getLastname()
-							,role : ""
+							,roleIDList : ""
+							,roleNameList : ""
 						};
 						for (var role in user.getRoles()) {
-							listAppend(SESSION.stUser.role, role.getRoleName());
+							SESSION.stUser.roleIDList = listAppend(SESSION.stUser.roleIDList, role.getRoleID());
+							SESSION.stUser.roleNameList = listAppend(SESSION.stUser.roleNameList, role.getRoleName());
 						}
 						return 1;
 					} else {

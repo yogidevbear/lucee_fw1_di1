@@ -11,12 +11,9 @@ component accessors=true {
 	property framework;
 
 	function before( struct rc ) {
+		param name="rc.arrSuccess" type="array" default=[];
 		param name="rc.arrValidate" type="array" default=[];
 		param name="rc.stValidate" type="struct" default={"generic":[]};
-	}
-
-	function pagenotfound( struct rc ) {
-		
 	}
 
 	function default( struct rc ) {
@@ -130,7 +127,24 @@ component accessors=true {
 		var user = variables.userService.getByActivationKeyAndActivationCode( activationKey: rc.activationKey, activationCode: rc.activationCode );
 
 		if ( user.getUserID() > 0 ) {
-			writeDump("activate user");abort;
+			if ( len( user.getActivatedAt() ) > 0 ) {
+				arrayAppend( rc.arrSuccess, { fieldName: "success", message: "Your account has been activated, please login." } );
+				variables.framework.redirectCustomURL('/signin/','arrSuccess');
+			} else {
+				user.setActivatedAt( dateConvert('local2Utc', now()) );
+				user = variables.userService.save( user );
+				if ( len(user.getActivatedAt()) > 0 ) {
+					arrayAppend( rc.arrSuccess, { fieldName: "success", message: "Your account has been activated, please login." } );
+					variables.framework.redirectCustomURL('/signin/','arrSuccess');
+				} else {
+					// Add generic error for failed registration
+					rc.arrValidate = variables.validationService.appendArrValidateError(
+						 arrValidate:rc.arrValidate
+						,fieldName:"generic"
+						,error:'The activation link you used appears to be incorrect. <a href="/resend-activation-email/">Request a new activation email?</a>.'
+					);
+				}
+			}
 		} else {
 			// Add generic error for failed registration
 			rc.arrValidate = variables.validationService.appendArrValidateError(

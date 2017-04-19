@@ -3,11 +3,21 @@
 
 	<p>Some blurb about signing in to your account.</p>
 
+	<cfif structKeyExists(rc,"arrSuccess") AND arrayLen(rc.arrSuccess)>
+		<div class="alert alert-success">
+			<ul>
+				<cfloop array="#rc.arrSuccess#" index="success">
+					<li>#success.message#</li>
+				</cfloop>
+			</ul>
+		</div>
+	</cfif>
+
 	<cfif structKeyExists(rc.stValidate,'generic') && arrayLen(rc.stValidate.generic)>
 		<div class="alert alert-error">
 			Error:
 			<ul>
-				<cfloop array="#rc.stValidate.generic#" index="error" >
+				<cfloop array="#rc.stValidate.generic#" index="error">
 					<li>#error#</li>
 				</cfloop>
 			</ul>

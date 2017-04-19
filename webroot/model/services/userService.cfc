@@ -10,8 +10,10 @@ component accessors=true {
 		for (var user in qUsers) {
 			var qUserRoles = variables.userGateway.getUserRoles(userID:user.userID);
 			user.roles = [];
+			user.roleIDList = "";
 			for (var role in qUserRoles) {
 				arrayAppend( user.roles, variables.roleService.list().get(role.roleID) );
+				user.roleIDList = listAppend( user.roleIDList, role.roleID );
 			}
 			variables.users[user.userID] = beanFactory.injectProperties( "userBean", user );
 		}
@@ -86,7 +88,7 @@ component accessors=true {
 				,lastname: arguments.user.getLastname()
 				,activationKey: arguments.user.getActivationKey()
 				,activationCode: arguments.user.getActivationCode()
-				,roleID: arguments.user.getRoleID()
+				,roleIDList: arguments.user.getRoleIDList()
 			);
 			if ( newUserID > 0 ) {
 				var qUser = variables.userGateway.getUsers(userID:newUserID);
@@ -103,7 +105,21 @@ component accessors=true {
 				return get( 0 );
 			}
 		} else {
-			writeDump("UPDATE");abort;
+			result = variables.userGateway.updateUser(
+				 userID: arguments.user.getUserID()
+				,username: arguments.user.getUsername()
+				,password: arguments.user.getPassword()
+				,salt: arguments.user.getSalt()
+				,firstname: arguments.user.getFirstname()
+				,lastname: arguments.user.getLastname()
+				,activationKey: arguments.user.getActivationKey()
+				,activationCode: arguments.user.getActivationCode()
+				,activationCodeCreatedAt: arguments.user.getActivationCodeCreatedAt()
+				,activatedAt: arguments.user.getActivatedAt()
+				,roleIDList: arguments.user.getRoleIDList()
+			);
+			init( userID : arguments.user.getUserID() );
+			return get( arguments.user.getUserID() );
 		}
 	}
 

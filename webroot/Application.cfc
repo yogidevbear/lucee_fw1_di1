@@ -136,4 +136,8 @@ component extends=framework.one {
 		// end of request processing
 	}
 
+	function onMissingView( struct rc ) {
+		return view('main/pagenotfound');
+	}
+
 }

@@ -6,8 +6,8 @@ component accessors=true {
 	property salt;
 	property firstname;
 	property lastname;
+	property roleIDList;
 	property roles;
-	property roleID;
 	property activationKey;
 	property activationCode;
 	property activationCodeCreatedAt;
@@ -15,7 +15,6 @@ component accessors=true {
 	property createdAt;
 	property updatedAt;
 
-	// function init( numeric userID = 0, string username = "", numeric roleID = 0, any roleName = "" ) {
 	function init(
 		numeric userID = 0,
 		string username = "",
@@ -29,6 +28,7 @@ component accessors=true {
 		string activatedAt = "",
 		string createdAt = "",
 		string updatedAt = "",
+		string roleIDList = "",
 		any roles = ""
 	) {
 		variables.userID = userID;
@@ -43,12 +43,12 @@ component accessors=true {
 		variables.activatedAt = activatedAt;
 		variables.createdAt = createdAt;
 		variables.updatedAt = updatedAt;
-		// variables.roleID = roleID;
 		variables.roles = roles;
+		variables.roleIDList = "";
 		if ( isObject( roles ) ) {
-			variables.roleID = roles.getRoleID();
-		} else {
-			variables.roleID = 2; // default role id is user
+			for ( var role in roles ) {
+				variables.roleIDList = listAppend( variables.roleIDList, role.getRoleID() );
+			}
 		}
 		return this;
 	}
