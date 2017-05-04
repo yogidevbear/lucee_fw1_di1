@@ -129,13 +129,13 @@ component accessors=true {
 		if ( user.getUserID() > 0 ) {
 			if ( len( user.getActivatedAt() ) > 0 ) {
 				arrayAppend( rc.arrSuccess, { fieldName: "success", message: "Your account has been activated, please login." } );
-				variables.framework.redirectCustomURL('/signin/','arrSuccess');
+				variables.framework.redirectCustomURL( uri:'/signin/', preserve:'arrSuccess' );
 			} else {
 				user.setActivatedAt( dateConvert('local2Utc', now()) );
 				user = variables.userService.save( user );
 				if ( len(user.getActivatedAt()) > 0 ) {
 					arrayAppend( rc.arrSuccess, { fieldName: "success", message: "Your account has been activated, please login." } );
-					variables.framework.redirectCustomURL('/signin/','arrSuccess');
+					variables.framework.redirectCustomURL( uri:'/signin/', preserve:'arrSuccess' );
 				} else {
 					// Add generic error for failed registration
 					rc.arrValidate = variables.validationService.appendArrValidateError(
@@ -218,6 +218,7 @@ component accessors=true {
 	function signin( struct rc ) {
 		param name="rc.username" type="string" default="";
 		param name="rc.password" type="string" default="";
+		
 		rc.reCaptchaClientKey = variables.reCaptchaService.getClientKey();
 		rc.reCaptchaServerSecret = variables.reCaptchaService.getServerSecret();
 		rc.reCaptchaGoogleURL = variables.reCaptchaService.getGoogleURL();

@@ -1,4 +1,5 @@
 RewriteEngine On
 
 # Default subsystem rewrites
-RewriteRule ^/(signup|signin|signout)/$ /index.cfm?action=main.$1 [NC, QSA, L]
+RewriteRule ^/(signup|signin|signout)/$ /index.cfm?action=main.$1 [NC,QSA,L]
+RewriteRule ^/activate/(.*)/(.*)/$ /index.cfm?action=main.activate&activationKey=$1&activationCode=$2 [NC,QSA,L]
