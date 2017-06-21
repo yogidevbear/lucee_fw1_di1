@@ -3,10 +3,14 @@
         "fw1":"^4.0.0"
     },
     "devDependencies":{
-    	"testbox":"^2.4.0+80"
+        "testbox":"be"
     },
     "installPaths":{
         "testbox":"testbox",
         "fw1":"framework"
+    },
+    "testbox":{
+        "runner":"http://127.0.0.1:58248/tests/runner.cfm",
+        "verbose":"false"
     }
 }
