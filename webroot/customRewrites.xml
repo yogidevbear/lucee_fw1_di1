@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlrewrite>
+    <rule>
+        <from>^/(signup|signin|signout)/$</from>
+        <to last="true">/index.cfm?action=main.$1</to>
+    </rule>
+</urlrewrite>

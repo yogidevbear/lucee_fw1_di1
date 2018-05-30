@@ -1,0 +1,7 @@
+start cfengine=lucee@5 --rewritesEnable rewritesConfig=.htaccess --debug
+start cfengine=lucee@5 --rewritesEnable rewritesConfig=.htaccess --debug --console runwarArgs="--log-level trace"
+
+Testbox url
+http://127.0.0.1:53009/testbox/test-runner/index.cfm?opt_run=true&target=%2Ftests%2F&opt_recurse=true&labels=&reporter=Simple
+http://127.0.0.1:53009/testbox/test-browser/
+http://127.0.0.1:53009/tests/services/securityServiceTest.cfc?method=runRemote
